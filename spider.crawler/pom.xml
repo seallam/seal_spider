@@ -27,10 +27,5 @@
             <artifactId>webmagic-extension</artifactId>
             <version>0.7.2</version>
         </dependency>
-        <dependency>
-            <groupId>com.lianj.spider.center</groupId>
-            <artifactId>lianj.spider.center.commons</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
     </dependencies>
 </project>

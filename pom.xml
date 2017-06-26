@@ -15,6 +15,7 @@
         <groupId>com.seal</groupId>
         <artifactId>seal.pom</artifactId>
         <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../seal_pom/pom.xml</relativePath>
     </parent>
 
     <groupId>com.seal</groupId>
