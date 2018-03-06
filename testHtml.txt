@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+        <link href="./css/css.css" rel="stylesheet" type="text/css" />
+        <link href="./css/page.css" rel="stylesheet" type="text/css" />
+        <link href="./css/t.css" rel="stylesheet" type="text/css" />
+        <link href="./css/idangerous.swiper.css" rel="stylesheet" type="text/css" />
+        <link href="./css/jquery.datetimepicker.min.css" rel="stylesheet" type="text/css" />
+
+        <script type="text/javascript" src="./js/jquery-3.1.0.min.js"></script>
+        <script type="text/javascript" src="./js/jquery.datetimepicker.full.min.js"></script>
+        <script type="text/javascript" src="./js/js.js"></script>
+        <script type="text/javascript" src="./js/idangerous.swiper.min.js"></script>
+
+        <script src="js/gVerify.js"></script>
+        <title>浙江省建筑市场监管与诚信信息发布平台</title>
+    </head>
+
+    <body >
+
+                        <div class="check_box">
+                    <div class="check_text">刷新过快，需输入验证码验证！<br>验证通过后，方可进行正常浏览。<br>建议刷新速度不要过快。</div>
+                    <img src="img.php" width="150" class="cat_img"/><br>
+                    <input type="text" id="code_input" value="" placeholder="请输入验证码" /><br>
+                    <button id="my_button">验证</button>
+                    <script type="text/javascript">
+                        $('.cat_img').click(function(){
+                            $(this).attr('src','img.php?v='+Date.parse(new Date())/1000)
+                        })
+                        $('#my_button').click(function(){
+                            var v=$('#code_input').val()
+							if(v){
+								$.ajax({
+									url: './sliderajax.php', //后台处理程序
+									type: 'post', //数据发送方式
+									dataType: 'json', //接受数据格式
+									data: {cat:v},
+									success: function (data) {
+										console.log(data)
+										if(data==998){
+
+											//验证通过
+											alert('验证通过！跳转至浏览界面。')
+											location.reload()
+
+										}else{
+											alert('验证码错误，请重新输入！')
+										}
+
+
+									}
+								})
+							}else{
+								alert('请输入验证码！')
+							}
+                            
+                        })
+
+                    </script>
+                </div>
+
+        
