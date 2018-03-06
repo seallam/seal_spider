@@ -49,6 +49,6 @@ public class LoginAuthReqHandler extends ChannelHandlerAdapter {
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
 //        super.exceptionCaught(ctx, cause);
-        ctx.fireChannelRead(cause);
+        ctx.fireExceptionCaught(cause);
     }
 }

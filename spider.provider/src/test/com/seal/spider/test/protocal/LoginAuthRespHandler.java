@@ -32,7 +32,7 @@ public class LoginAuthRespHandler extends ChannelHandlerAdapter {
             if (nodeCheck.containsKey(nodeIndex)) {
                 loginResp = buildResponse((byte) -1);
             } else {
-                InetSocketAddress address = (InetSocketAddress) ctx.channel();
+                InetSocketAddress address = (InetSocketAddress) ctx.channel().remoteAddress();
                 String ip = address.getAddress().getHostAddress();
                 boolean isOk = false;
                 for (String WIP : whiteList) {
@@ -65,7 +65,9 @@ public class LoginAuthRespHandler extends ChannelHandlerAdapter {
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
 //        super.exceptionCaught(ctx, cause);
+        cause.printStackTrace();
+        nodeCheck.remove(ctx.channel().remoteAddress().toString());
         ctx.close();
-        ctx.fireChannelRead(cause);
+        ctx.fireExceptionCaught(cause);
     }
 }

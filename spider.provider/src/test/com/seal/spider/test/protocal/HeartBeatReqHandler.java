@@ -61,6 +61,6 @@ public class HeartBeatReqHandler extends ChannelHandlerAdapter {
             heartBeat.cancel(true);
             heartBeat = null;
         }
-        ctx.fireChannelRead(cause);
+        ctx.fireExceptionCaught(cause);
     }
 }

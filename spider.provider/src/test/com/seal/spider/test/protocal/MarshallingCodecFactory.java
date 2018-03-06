@@ -1,37 +1,60 @@
+/*
+ * Copyright 2013-2018 Lilinfeng.
+ *  
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *  
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.seal.spider.test.protocal;
 
-import io.netty.handler.codec.marshalling.DefaultMarshallerProvider;
-import io.netty.handler.codec.marshalling.DefaultUnmarshallerProvider;
-import io.netty.handler.codec.marshalling.MarshallerProvider;
-import io.netty.handler.codec.marshalling.UnmarshallerProvider;
-import org.jboss.marshalling.MarshallerFactory;
-import org.jboss.marshalling.Marshalling;
-import org.jboss.marshalling.MarshallingConfiguration;
+import org.jboss.marshalling.*;
+
+import java.io.IOException;
 
 /**
- * 功能：
- * 作者：Seal(Seal@lianj.com)
- * <p>
- * 日期：2018年03月06日 11:50
- * 版权所有：广东联结网络技术有限公司 版权所有(C) 2016-2018
+ * @author Administrator
+ * @date 2014年3月15日
+ * @version 1.0
  */
-public class MarshallingCodecFactory {
+public final class MarshallingCodecFactory {
 
-    public static NettyMarshallingDecoder buildMarshallingDecoder() {
-        MarshallerFactory marshallerFactory = Marshalling.getProvidedMarshallerFactory("serial");
-        MarshallingConfiguration configuration = new MarshallingConfiguration();
-        configuration.setVersion(5);
-        UnmarshallerProvider provider = new DefaultUnmarshallerProvider(marshallerFactory, configuration);
-        NettyMarshallingDecoder decoder = new NettyMarshallingDecoder(provider, 10240);
-        return decoder;
+    /**
+     * 创建Jboss Marshaller
+     * 
+     * @return
+     * @throws IOException
+     */
+    protected static Marshaller buildMarshalling() throws IOException {
+	final MarshallerFactory marshallerFactory = Marshalling
+		.getProvidedMarshallerFactory("serial");
+	final MarshallingConfiguration configuration = new MarshallingConfiguration();
+	configuration.setVersion(5);
+	Marshaller marshaller = marshallerFactory
+		.createMarshaller(configuration);
+	return marshaller;
     }
 
-    public static NettyMarshallingEncoder buildMarshallingEncoder() {
-        MarshallerFactory marshallerFactory = Marshalling.getProvidedMarshallerFactory("serial");
-        MarshallingConfiguration configuration = new MarshallingConfiguration();
-        configuration.setVersion(5);
-        MarshallerProvider provider = new DefaultMarshallerProvider(marshallerFactory, configuration);
-        NettyMarshallingEncoder encoder = new NettyMarshallingEncoder(provider);
-        return encoder;
+    /**
+     * 创建Jboss Unmarshaller
+     * 
+     * @return
+     * @throws IOException
+     */
+    protected static Unmarshaller buildUnMarshalling() throws IOException {
+	final MarshallerFactory marshallerFactory = Marshalling
+		.getProvidedMarshallerFactory("serial");
+	final MarshallingConfiguration configuration = new MarshallingConfiguration();
+	configuration.setVersion(5);
+	final Unmarshaller unmarshaller = marshallerFactory
+		.createUnmarshaller(configuration);
+	return unmarshaller;
     }
 }

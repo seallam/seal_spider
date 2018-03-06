@@ -1,33 +1,46 @@
+/*
+ * Copyright 2013-2018 Lilinfeng.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.seal.spider.test.protocal;
 
-import com.google.common.collect.Maps;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
-import io.netty.util.CharsetUtil;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 功能：netty消息解码器
- * 作者：Seal(Seal@lianj.com)
- * <p>
- * 日期：2018年03月06日 11:57
- * 版权所有：广东联结网络技术有限公司 版权所有(C) 2016-2018
+ * @author Lilinfeng
+ * @version 1.0
+ * @date 2014年3月15日
  */
 public class NettyMessageDecoder extends LengthFieldBasedFrameDecoder {
 
-    private NettyMarshallingDecoder marshallingDecoder;
+    MarshallingDecoder marshallingDecoder;
 
-    public NettyMessageDecoder(int maxFrameLength, int lengthFieldOffset, int lengthFieldLength) throws IOException {
+    public NettyMessageDecoder(int maxFrameLength, int lengthFieldOffset,
+                               int lengthFieldLength) throws IOException {
         super(maxFrameLength, lengthFieldOffset, lengthFieldLength);
-        marshallingDecoder = MarshallingCodecFactory.buildMarshallingDecoder();
+        marshallingDecoder = new MarshallingDecoder();
     }
 
     @Override
-    protected Object decode(ChannelHandlerContext ctx, ByteBuf in) throws Exception {
-//        return super.decode(ctx, in);
+    protected Object decode(ChannelHandlerContext ctx, ByteBuf in)
+            throws Exception {
         ByteBuf frame = (ByteBuf) super.decode(ctx, in);
         if (frame == null) {
             return null;
@@ -43,7 +56,7 @@ public class NettyMessageDecoder extends LengthFieldBasedFrameDecoder {
 
         int size = frame.readInt();
         if (size > 0) {
-            Map<String, Object> attch = Maps.newHashMap();
+            Map<String, Object> attch = new HashMap<String, Object>(size);
             int keySize = 0;
             byte[] keyArray = null;
             String key = null;
@@ -51,15 +64,15 @@ public class NettyMessageDecoder extends LengthFieldBasedFrameDecoder {
                 keySize = frame.readInt();
                 keyArray = new byte[keySize];
                 frame.readBytes(keyArray);
-                key = new String(keyArray, CharsetUtil.UTF_8);
-                attch.put(key, marshallingDecoder.decode(ctx, frame));
+                key = new String(keyArray, "UTF-8");
+                attch.put(key, marshallingDecoder.decode(frame));
             }
             keyArray = null;
             key = null;
             header.setAttachment(attch);
         }
         if (frame.readableBytes() > 4) {
-            message.setBody(marshallingDecoder.decode(ctx, frame));
+            message.setBody(marshallingDecoder.decode(frame));
         }
         message.setHeader(header);
         return message;
